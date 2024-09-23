@@ -20,12 +20,6 @@ npm i -g mintlify
 yarn global add mintlify
 ```
 
-```graphql
-directive @requiresScopes(
-  scopes: [[String!]!]!
-) on FIELD_DEFINITION | OBJECT | INTERFACE | SCALAR | ENUM
-```
-
 
 </CodeGroup>
 
@@ -33,6 +27,23 @@ Step 2. Go to the docs are located (where you can find `mint.json`) and run the 
 
 ```bash
 mintlify dev
+```
+
+```graphql
+type PersonalDetails @inaccessible {
+  age: Int
+  heightCm: Int
+  birday: Date
+}
+
+type User @key(fields: "id") @key(fields: "socialSecurityNumber") {
+  id: ID!
+  # socialSecurityNumber is a key to enable fetching users by social security number, but we do not want the field to be queryable.
+  socialSecurityNumber: String! @inaccessible
+
+  # This field must be marked as inaccessible because the field type is inaccessible.
+  details: PersonalDetails @inaccessible
+}
 ```
 
 The documentation website is now available at `http://localhost:3000`.
